@@ -5,10 +5,16 @@
  */
 package Vista;
 
+import Conexion.conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,6 +22,8 @@ import javax.swing.ImageIcon;
  */
 public class Inicio extends javax.swing.JFrame {
 
+    public static String user = ""; //Se declara así para enviar datos entre interfaces
+    String pass = "";
     /**
      * Creates new form Inicio
      */
@@ -52,8 +60,8 @@ public class Inicio extends javax.swing.JFrame {
         titulo = new javax.swing.JLabel();
         usuario = new javax.swing.JLabel();
         clave = new javax.swing.JLabel();
-        user = new javax.swing.JTextField();
-        clv = new javax.swing.JPasswordField();
+        txt_user = new javax.swing.JTextField();
+        txt_clv = new javax.swing.JPasswordField();
         btnEntrar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -76,16 +84,21 @@ public class Inicio extends javax.swing.JFrame {
         clave.setText("Contraseña");
         getContentPane().add(clave, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, -1));
 
-        user.addActionListener(new java.awt.event.ActionListener() {
+        txt_user.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                userActionPerformed(evt);
+                txt_userActionPerformed(evt);
             }
         });
-        getContentPane().add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 100, 210, -1));
-        getContentPane().add(clv, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 210, -1));
+        getContentPane().add(txt_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 100, 210, -1));
+        getContentPane().add(txt_clv, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 210, -1));
 
         btnEntrar.setBackground(new java.awt.Color(102, 255, 102));
         btnEntrar.setText("Entrar");
+        btnEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEntrarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnEntrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 220, 90, -1));
 
         btnSalir.setBackground(new java.awt.Color(255, 51, 51));
@@ -99,9 +112,53 @@ public class Inicio extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userActionPerformed
+    private void txt_userActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_userActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_userActionPerformed
+    }//GEN-LAST:event_txt_userActionPerformed
+
+    private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
+        // TODO add your handling code here:
+        user = txt_user.getText().trim();
+        pass = txt_clv.getText().trim();
+        if (!txt_user.equals("") || !pass.equals("")) {
+
+            try {
+                Connection cn = conexion.conectar();
+                PreparedStatement pst = cn.prepareStatement("SELECT tipo_nivel, estado FROM usuarios WHERE username = '" + user
+                        + "' and password = '" + pass + "'");
+
+                ResultSet rs = pst.executeQuery();
+                if (rs.next()) {
+
+                    String tipo_nivel = rs.getString("tipo_nivel");
+                    String estatus = rs.getString("estado");
+
+                    if (tipo_nivel.equalsIgnoreCase("administrador") && estatus.equalsIgnoreCase("activo")) {
+                        //dispose(); Hace que el JFrame sea destruido y limpiado por el sistema operativo.
+                        dispose();
+                        new Administrador().setVisible(true);
+                    } else if (tipo_nivel.equalsIgnoreCase("caja") && estatus.equalsIgnoreCase("activo")) {
+                        dispose();
+                        new Caja().setVisible(true);
+                    }/* else if (tipo_nivel.equalsIgnoreCase("Tecnico") && estatus.equalsIgnoreCase("Activo")) {
+                        dispose();
+                        new Tecnico().setVisible(true);
+                    }*/
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Datos de acceso incorrectos.");
+                    txt_user.setText("");
+                    txt_clv.setText("");
+                }
+
+            } catch (SQLException e) {
+                System.err.println("Error en el botón Acceder." + e);
+                JOptionPane.showMessageDialog(null, "¡¡ERROR al iniciar!!, contacte al administrador.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debes llenar todos los campos");
+        }
+    }//GEN-LAST:event_btnEntrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -142,11 +199,11 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton btnEntrar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel clave;
-    private javax.swing.JPasswordField clv;
     private javax.swing.JLabel imgfondo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel titulo;
-    private javax.swing.JTextField user;
+    private javax.swing.JPasswordField txt_clv;
+    private javax.swing.JTextField txt_user;
     private javax.swing.JLabel usuario;
     // End of variables declaration//GEN-END:variables
 }
