@@ -140,10 +140,10 @@ public class Inicio extends javax.swing.JFrame {
                     } else if (tipo_nivel.equalsIgnoreCase("caja") && estatus.equalsIgnoreCase("activo")) {
                         dispose();
                         new Caja().setVisible(true);
-                    }/* else if (tipo_nivel.equalsIgnoreCase("Tecnico") && estatus.equalsIgnoreCase("Activo")) {
+                    } else if (tipo_nivel.equalsIgnoreCase("mesera") && estatus.equalsIgnoreCase("Activo")) {
                         dispose();
-                        new Tecnico().setVisible(true);
-                    }*/
+                        new Mesero().setVisible(true);
+                    }
 
                 } else {
                     JOptionPane.showMessageDialog(null, "Datos de acceso incorrectos.");
