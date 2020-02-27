@@ -6,7 +6,8 @@
 package Vista;
 
 
-import Controladores.Boton;
+import Controladores.NroMesa;
+import Controladores.TipoMesa;
 import java.awt.Image;
 import java.awt.Toolkit;
 
@@ -16,7 +17,6 @@ import java.awt.Toolkit;
  * @author Lenovo
  */
 public class Mesero extends javax.swing.JFrame {
-
     /**
      * Creates new form Mesero
      */
@@ -367,9 +367,11 @@ public class Mesero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton25ActionPerformed
 
     private void boton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton1ActionPerformed
-        String botn1 ="1";
-        Boton btn = new Boton();
-        btn.setValor_boton(botn1);
+        String mesa ="1";
+        String tipo= "General";
+        
+        NroMesa.setValor_boton(mesa);
+        TipoMesa.setTipo(tipo);
         
         MeseroPedido mp = new MeseroPedido();
         mp.setVisible(true);

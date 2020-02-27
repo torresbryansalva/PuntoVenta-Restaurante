@@ -5,7 +5,7 @@ package Controladores;
  *
  * @author Lenovo
  */
-public class Boton {
+public class NroMesa {
 
     /**
      * @return the valor_boton

@@ -6,6 +6,7 @@
 package Vista;
 
 import Conexion.conexion;
+import Controladores.PasarNombre;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.Connection;
@@ -141,6 +142,8 @@ public class Inicio extends javax.swing.JFrame {
                         dispose();
                         new Caja().setVisible(true);
                     } else if (tipo_nivel.equalsIgnoreCase("mesera") && estatus.equalsIgnoreCase("Activo")) {
+                       
+                        PasarNombre.setNom(user);
                         dispose();
                         new Mesero().setVisible(true);
                     }
